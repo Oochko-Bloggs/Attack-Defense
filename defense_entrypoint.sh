@@ -9,7 +9,7 @@ SSH_PORT="${SSH_PORT:-3200}"
 
 # Central log dir for passwords (host: /opt/ctf_logs, container: /logs)
 LOG_DIR="/logs"
-PASS_FILE="${LOG_DIR}/defense_passwords.txt"
+#PASS_FILE="${LOG_DIR}/defense_passwords.txt"
 
 # Create /logs (host should mount /opt/ctf_logs:/logs)
 mkdir -p "$LOG_DIR"
@@ -19,15 +19,19 @@ USERNAME="team${TEAM_NUM}"
 if ! id "$USERNAME" &>/dev/null; then
     useradd -m -s /bin/bash "$USERNAME"
 
-    # Generate 6-digit numeric password
-    PASSWORD="$(tr -dc '0-9' </dev/urandom | head -c 6)"
+    if [ -n "$TEAM_PASSWORD" ]; then
+        PASSWORD="$TEAM_PASSWORD"
+    else
+        PASSWORD="$(tr -dc '0-9' </dev/urandom | head -c 6)"
+    fi
+
     echo "${USERNAME}:${PASSWORD}" | chpasswd
 
     # Log credentials for organizer (host: /opt/ctf_logs/defense_passwords.txt)
-    {
-        echo "TEAM_NUM=${TEAM_NUM} TEAM_NAME=${TEAM_NAME} USER=${USERNAME} PASSWORD=${PASSWORD} SSH_PORT=${SSH_PORT}"
-    } >> "$PASS_FILE"
-    chmod 600 "$PASS_FILE" 2>/dev/null || true
+    #{
+    #    echo "TEAM_NUM=${TEAM_NUM} TEAM_NAME=${TEAM_NAME} USER=${USERNAME} PASSWORD=${PASSWORD} SSH_PORT=${SSH_PORT}"
+    #} >> "$PASS_FILE"
+    #chmod 600 "$PASS_FILE" 2>/dev/null || true
 fi
 
 HOME_DIR="$(getent passwd "$USERNAME" | cut -d: -f6)"

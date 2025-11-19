@@ -31,20 +31,24 @@ USERNAME="team${TEAM_NUM}"
 if ! id "$USERNAME" &>/dev/null; then
     useradd -m -s /bin/bash "$USERNAME"
 
-    PASSWORD="$(tr -dc '0-9' </dev/urandom | head -c 6)"
+    if [ -n "$TEAM_PASSWORD" ]; then
+        PASSWORD="$TEAM_PASSWORD"
+    else
+        PASSWORD="$(tr -dc '0-9' </dev/urandom | head -c 6)"
+    fi
     echo "$USERNAME:$PASSWORD" | chpasswd
 
     # No sudo for you :V
     # echo "$USERNAME ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
     # Log the password for the organizer (host sees this as /opt/ctf_logs/ssh_passwords.txt)
-    PASS_FILE="/logs/ssh_passwords.txt"
-    {
-        echo "TEAM_NUM=$TEAM_NUM TEAM_NAME=$TEAM_NAME USER=$USERNAME PASSWORD=$PASSWORD SSH_PORT=$SSH_PORT"
-    } >> "$PASS_FILE"
+    # PASS_FILE="/logs/ssh_passwords.txt"
+    #{
+    #    echo "TEAM_NUM=$TEAM_NUM TEAM_NAME=$TEAM_NAME USER=$USERNAME PASSWORD=$PASSWORD SSH_PORT=$SSH_PORT"
+    #} >> "$PASS_FILE"
 
     # Make it readable only by root (inside container)
-    chmod 600 "$PASS_FILE" 2>/dev/null || true
+    #chmod 600 "$PASS_FILE" 2>/dev/null || true
 fi
 
 HOME_DIR="$(getent passwd "$USERNAME" | cut -d: -f6)"

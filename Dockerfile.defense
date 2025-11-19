@@ -25,8 +25,8 @@ RUN mkdir -p /var/run/sshd /app
 COPY defense_entrypoint.sh /entrypoint.sh
 RUN chmod 700 /entrypoint.sh
 
-COPY ids_skeleton.py /app/ids_skeleton.py
-RUN chmod 755 /app/ids_skeleton.py
+COPY base_IDS.py /app/base_IDS.py
+RUN chmod 755 /app/base_IDS.py
 
 EXPOSE 2222
 
