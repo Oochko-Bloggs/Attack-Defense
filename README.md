@@ -1,21 +1,31 @@
 # Attack-Defense
-This scripts for attack and defense type competition
+## This scripts for attack and defense type competition
 
 
-To test run 
+# To test run 
 
-SETUP run setup.sh to create interfaces
+Create and set permissions in the folder 
 BUILD docker first 
+```
+sudo mkdir -p /opt/ctf_logs/logs /opt/ctf_logs/passwords /opt/ctf_logs/ids
+sudo chmod 700 /opt/ctf_logs/passwords
+sudo chmod 755 /opt/ctf_logs/logs /opt/ctf_logs/ids
+```
 
-## ATTACK DOCKER
-sudo docker build -f Dockerfile -t ctf-attack .
 
-## DEFENSE DOCKER
-sudo docker build -f Dockerfile.defense -t ctf-defense .
+### ATTACK DOCKER
+```sudo docker build -f Dockerfile -t ctf-attack .```
 
-RUN PYTHON INIT CODE TO DOCKER UP
+### DEFENSE DOCKER
+```sudo docker build -f Dockerfile.defense -t ctf-defense .```
 
-python3 __init__.py
+### RUN PYTHON INIT CODE TO DOCKER UP
+
+```python3 __init__.py```
+### Run the API code to recieve the result from the docker 
+```
+sudo -E python3 -m uvicorn scoring_api:app --host 0.0.0.0 --port 9000
+```
 
 ===============
 
@@ -70,7 +80,7 @@ ___________________________ Create docker with team name
 
 
 ssh tester@localhost -p 2207
-# password: ******
+password: ******
 
 cansend can0 440#00005000000000
 
@@ -82,7 +92,7 @@ tail -f /opt/ctf_logs/can_log.jsonl
 ___________________________ check log
 
 
-===== CHECKING THE PASSWORD FOR USERS =====
+### ===== CHECKING THE PASSWORD FOR USERS =====
 
 After creating the dockers with SSH we can check out the passwords from 
 
