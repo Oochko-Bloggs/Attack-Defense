@@ -8,7 +8,6 @@ ROLE="${ROLE:-attack}"
 SSH_PORT="${SSH_PORT:-2222}"
 LOG_FILE="${LOG_FILE:-/logs/can_log.jsonl}"   # If host mounts /opt/ctf_logs:/logs, we set LOG_FILE=/logs/can_log.jsonl
 API_PORT="${API_PORT:-8000}"
-API_KEY="${API_KEY:-}"
 
 # ===== Secret tag (unique per container) =====
 
