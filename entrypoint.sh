@@ -8,6 +8,7 @@ ROLE="${ROLE:-attack}"
 SSH_PORT="${SSH_PORT:-2222}"
 LOG_FILE="${LOG_FILE:-/logs/can_log.jsonl}"   # If host mounts /opt/ctf_logs:/logs, we set LOG_FILE=/logs/can_log.jsonl
 API_PORT="${API_PORT:-8000}"
+API_KEY="${API_KEY:-}"
 
 # ===== Secret tag (unique per container) =====
 
@@ -51,6 +52,16 @@ if ! id "$USERNAME" &>/dev/null; then
 fi
 
 HOME_DIR="$(getent passwd "$USERNAME" | cut -d: -f6)"
+# ===== Copy default user_custom.py into team home (first run) =====
+if [ -f /app/user_custom.py ]; then
+    # Only copy if it doesn't already exist (so user edits aren't overwritten)
+    if [ ! -f "$HOME_DIR/user_custom.py" ]; then
+        cp /app/user_custom.py "$HOME_DIR/user_custom.py"
+        chown "$USERNAME:$USERNAME" "$HOME_DIR/user_custom.py"
+        chmod 644 "$HOME_DIR/user_custom.py"
+    fi
+fi
+
 
 # ===== Ensure .bashrc is loaded on SSH login =====
 if ! grep -q "source ~/.bashrc" "$HOME_DIR/.profile" 2>/dev/null && \
@@ -69,9 +80,11 @@ export ROLE="$ROLE"
 export LOG_FILE="$LOG_FILE"
 export SECRET_TAG="$SECRET_TAG"
 export CONTAINER_NAME="team${TEAM_NUM}_attack"
+export PYTHONPATH="/app:${PYTHONPATH:-}"
 #### TEAM ENV END ####
 EOF
 fi
+
 
 # ===== CAN wrappers in .bashrc (only once) =====
 if ! grep -q "==== CAN WRAPPERS START ====" "$HOME_DIR/.bashrc" 2>/dev/null; then
@@ -96,9 +109,5 @@ fi
 
 chown "$USERNAME:$USERNAME" "$HOME_DIR/.bashrc" "$HOME_DIR/.profile"
 
-# ===== Start HTTP API fastapi + uvicorn =====
-cd /app
-uvicorn api:app --host 0.0.0.0 --port "$API_PORT" >> /var/log/api.log 2>&1 &
-
 # ===== Start SSH daemon in the foreground =====
-exec /usr/sbin/sshd -D -p "$SSH_PORT"
+exec /usr/sbin/sshd -D -p "$SSH_PORT" -o ListenAddress=0.0.0.0

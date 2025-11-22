@@ -1,31 +1,29 @@
 # Attack-Defense
-## This scripts for attack and defense type competition
+This scripts for attack and defense type competition
 
 
-# To test run 
+To test run 
 
-Create and set permissions in the folder 
+SETUP run setup.sh to create interfaces
 BUILD docker first 
-```
-sudo mkdir -p /opt/ctf_logs/logs /opt/ctf_logs/passwords /opt/ctf_logs/ids
-sudo chmod 700 /opt/ctf_logs/passwords
-sudo chmod 755 /opt/ctf_logs/logs /opt/ctf_logs/ids
-```
 
+## ATTACK DOCKER
+sudo docker build -f Dockerfile -t ctf-attack .
 
-### ATTACK DOCKER
-```sudo docker build -f Dockerfile -t ctf-attack .```
+## DEFENSE DOCKER
+sudo docker build -f Dockerfile.defense -t ctf-defense .
 
-### DEFENSE DOCKER
-```sudo docker build -f Dockerfile.defense -t ctf-defense .```
+Create log folder 
+____________________________
 
-### RUN PYTHON INIT CODE TO DOCKER UP
+sudo mkdir -p /opt/ctf_logs
+sudo chmod 777 /opt/ctf_logs
+____________________________
 
-```python3 __init__.py```
-### Run the API code to recieve the result from the docker 
-```
-sudo -E python3 -m uvicorn scoring_api:app --host 0.0.0.0 --port 9000
-```
+RUN PYTHON INIT CODE TO DOCKER UP
+===============
+
+python3 __init__.py
 
 ===============
 
@@ -37,22 +35,60 @@ sudo ip link add dev can0 type vcan
 sudo ip link set can0 up
 ip link show can0
 
+sudo ip link add dev vcan1 type vcan
+sudo ip link set vcan1 up
+ip link show vcan1
+
+sudo ip link add dev vcan2 type vcan
+sudo ip link set vcan2 up
+ip link show vcan2
+
+sudo ip link add dev vcan3 type vcan
+sudo ip link set vcan3 up
+ip link show vcan3
+
+sudo ip link add dev vcan4 type vcan
+sudo ip link set vcan4 up
+ip link show vcan4
+
+sudo ip link add dev vcan5 type vcan
+sudo ip link set vcan5 up
+ip link show vcan5
+
+sudo ip link add dev vcan6 type vcan
+sudo ip link set vcan6 up
+ip link show vcan6
+
+sudo ip link add dev vcan7 type vcan
+sudo ip link set vcan7 up
+ip link show vcan7
+
+sudo ip link add dev vcan8 type vcan
+sudo ip link set vcan8 up
+ip link show vcan8
+
+sudo ip link add dev vcan9 type vcan
+sudo ip link set vcan9 up
+ip link show vcan9
+
+sudo ip link add dev vcan10 type vcan
+sudo ip link set vcan10 up
+ip link show vcan10
+
+sudo ip link add dev vcan11 type vcan
+sudo ip link set vcan11 up
+ip link show vcan11
+
+sudo ip link add dev vcan12 type vcan
+sudo ip link set vcan12 up
+ip link show vcan12
+
+sudo ip link add dev vcan13 type vcan
+sudo ip link set vcan13 up
+ip link show vcan13
+
 ===============
 
-Create log folder 
-____________________________
-
-sudo mkdir -p /opt/ctf_logs
-sudo chmod 777 /opt/ctf_logs
-
-===============
-
-
-Create docker image and run 
-
-______________________________
-
-docker build -t ctf-attack .
 
 ______________________________
 
@@ -80,7 +116,7 @@ ___________________________ Create docker with team name
 
 
 ssh tester@localhost -p 2207
-password: ******
+# password: ******
 
 cansend can0 440#00005000000000
 
@@ -92,7 +128,7 @@ tail -f /opt/ctf_logs/can_log.jsonl
 ___________________________ check log
 
 
-### ===== CHECKING THE PASSWORD FOR USERS =====
+===== CHECKING THE PASSWORD FOR USERS =====
 
 After creating the dockers with SSH we can check out the passwords from 
 

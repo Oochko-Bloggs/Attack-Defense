@@ -19,7 +19,8 @@ RUN apt-get update && \
         python3-pip \
         can-utils \
         netcat \
-        uuid-runtime && \
+        uuid-runtime \
+        nano && \
     rm -rf /var/lib/apt/lists/* && \
     mkdir -p /var/run/sshd /app
 
@@ -42,9 +43,11 @@ RUN chmod 700 /entrypoint.sh
 COPY entry.py /app/entry.py
 RUN chmod 755 /app/entry.py
 
-COPY api.py /app/api.py
-RUN chmod +x /app/api.py
+COPY can_api.py /app/can_api.py
+RUN chmod 644 /app/can_api.py
 
+COPY user_custom.py /app/user_custom.py
+RUN chmod +x /app/user_custom.py
 # Expose SSH
 EXPOSE 2222
 

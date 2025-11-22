@@ -13,6 +13,8 @@ RUN apt-get update && \
         python3 \
         python3-pip \
         can-utils \
+        uuid-runtime \
+        nano \
     && rm -rf /var/lib/apt/lists/*
 
 # Python deps for IDS (extend if teams need more)
@@ -26,7 +28,10 @@ COPY defense_entrypoint.sh /entrypoint.sh
 RUN chmod 700 /entrypoint.sh
 
 COPY base_IDS.py /app/base_IDS.py
-RUN chmod 755 /app/base_IDS.py
+RUN chmod 644 /app/base_IDS.py
+
+COPY user_custom_def.py /app/user_custom.py
+RUN chmod +x /app/user_custom.py
 
 EXPOSE 2222
 
