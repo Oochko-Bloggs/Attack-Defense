@@ -2,10 +2,15 @@
 This scripts for attack and defense type competition
 
 
-To test run 
+Preparation 
+1. Create docker images for both attack and defense
+2. Create log folder and password foler in /opt/ctf_logs make them root owned but writable to other users not readable
+3. Create interface vcan0 and can0
+4. Configure the inside docker files ip address to host ip or domain
+5. Run Init code this gives you the dockers for attack and defense
+6. Run SERVER_* codes attack API on 8000 defense on 9000
 
-SETUP run setup.sh to create interfaces
-BUILD docker first 
+
 
 ## ATTACK DOCKER
 sudo docker build -f Dockerfile -t ctf-attack .
@@ -17,77 +22,13 @@ Create log folder
 ____________________________
 
 sudo mkdir -p /opt/ctf_logs
-sudo chmod 777 /opt/ctf_logs
+sudo chmod 733 /opt/ctf_logs
 ____________________________
 
 RUN PYTHON INIT CODE TO DOCKER UP
 ===============
 
 python3 __init__.py
-
-===============
-
-Create can0 interface 
-____________________________
-
-sudo modprobe vcan
-sudo ip link add dev can0 type vcan
-sudo ip link set can0 up
-ip link show can0
-
-sudo ip link add dev vcan1 type vcan
-sudo ip link set vcan1 up
-ip link show vcan1
-
-sudo ip link add dev vcan2 type vcan
-sudo ip link set vcan2 up
-ip link show vcan2
-
-sudo ip link add dev vcan3 type vcan
-sudo ip link set vcan3 up
-ip link show vcan3
-
-sudo ip link add dev vcan4 type vcan
-sudo ip link set vcan4 up
-ip link show vcan4
-
-sudo ip link add dev vcan5 type vcan
-sudo ip link set vcan5 up
-ip link show vcan5
-
-sudo ip link add dev vcan6 type vcan
-sudo ip link set vcan6 up
-ip link show vcan6
-
-sudo ip link add dev vcan7 type vcan
-sudo ip link set vcan7 up
-ip link show vcan7
-
-sudo ip link add dev vcan8 type vcan
-sudo ip link set vcan8 up
-ip link show vcan8
-
-sudo ip link add dev vcan9 type vcan
-sudo ip link set vcan9 up
-ip link show vcan9
-
-sudo ip link add dev vcan10 type vcan
-sudo ip link set vcan10 up
-ip link show vcan10
-
-sudo ip link add dev vcan11 type vcan
-sudo ip link set vcan11 up
-ip link show vcan11
-
-sudo ip link add dev vcan12 type vcan
-sudo ip link set vcan12 up
-ip link show vcan12
-
-sudo ip link add dev vcan13 type vcan
-sudo ip link set vcan13 up
-ip link show vcan13
-
-===============
 
 
 ______________________________
@@ -116,7 +57,6 @@ ___________________________ Create docker with team name
 
 
 ssh tester@localhost -p 2207
-# password: ******
 
 cansend can0 440#00005000000000
 
@@ -132,19 +72,14 @@ ___________________________ check log
 
 After creating the dockers with SSH we can check out the passwords from 
 
+### This folder not mounted on docker which it makes safe and not visible in docker 
+/opt/ctf_logs/passwords/passwords.txt
 
-/opt/ctf_logs/ssh_passwords.txt 
+_________________________________
+ ## API check on locally
 
-
-you need privilege to read them 
-
-
-
-
-++++++++++++ API ++++++++++++
 
 API connectivity check 
-
 
 On HOST : 
 
@@ -161,9 +96,13 @@ Send message
 
 curl -X POST http://127.0.0.1:8002/api/cansend \
 > -H "Content-Type: application/json" \
-> -H "X-Username: $USER" \
 > -d '{"interface":"can0", "frame":"123#R"}'
 
 
 ===== output =====
 {"status":"ok","interface":"can0","frame":"123#R"}
+
+
+<img width="3213" height="1584" alt="Untitled-2025-11-10-2315" src="https://github.com/user-attachments/assets/8147c5f9-39ea-43ae-a975-dfd75f04a2cd" />
+
+
