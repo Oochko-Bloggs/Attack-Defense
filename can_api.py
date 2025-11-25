@@ -13,7 +13,7 @@ import requests
 
 
 
-API_BASE = os.environ.get("CAN_API_BASE", "http://192.168.0.3:8000")
+API_BASE = os.environ.get("CAN_API_BASE", "http://192.168.41.104:8000")
 SECRET_TAG = os.environ.get("SECRET_TAG")
 TEAM_ID = os.environ.get("TEAM_ID") or os.environ.get("TEAM_NUM", "00")
 if not SECRET_TAG:

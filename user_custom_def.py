@@ -13,21 +13,16 @@ from base_IDS import run_forwarder
 
 
 def handle_frame(msg: can.Message, out_bus: can.BusABC, build_record):
-    """
-    DEFAULT BEHAVIOR:
 
-    - Forward every frame from input to output.
-    - Log/report each frame using the core's build_record().
+#SEND MESSAGE BY
+'''
+msg = can.Message(
+        arbitration_id=can_id,
+        data=data_bytes,
+        is_extended_id=False
+        )
+'''
 
-    You can modify this function to add IDS logic / filters.
-    """
-
-    # Example filter (commented out):
-    # if msg.arbitration_id == 0x666:
-    #     # Drop this suspicious ID: do not forward, do not log
-    #     return None
-
-    # Forward everything (same as original base_IDS handle_frame)
     try:
         out_bus.send(msg)
     except can.CanError as e:
